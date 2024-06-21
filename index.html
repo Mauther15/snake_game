@@ -180,15 +180,16 @@
                     x: Math.floor(Math.random() * (canvas.width / box)) * box,
                     y: Math.floor(Math.random() * (canvas.height / box)) * box
                 };
-            } else {
-                snake.pop();
             }
 
             if (snakeX == food2.x && snakeY == food2.y) {
+                score++
                 food2 = {
                     x: Math.floor(Math.random() * (canvas.width / box)) * box,
                     y: Math.floor(Math.random() * (canvas.height / box)) * box
                 }
+            }  else {
+                snake.pop();
             }
 
             let newHead = {
