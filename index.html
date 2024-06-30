@@ -67,8 +67,6 @@
         <button id="btn-restart" onclick="restartGame()">Restart</button>
     </div>
     <div class="btns">
-        <button onclick="acresTime()">Aumentar</button>
-        <button onclick="dimisTime()">Diminuir</button>
     </div>
     <script>
         const canvas = document.getElementById('gameCanvas');
@@ -150,14 +148,6 @@
                 }
             }
             return false;
-        }
-
-        function acresTime (interval) {
-            game = setInterval(draw, interval++)
-        }
-
-        function dimisTime (interval) {
-            game = setInterval(draw, interval--)
         }
 
         function gameOver() {
