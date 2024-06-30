@@ -31,19 +31,22 @@
         #gameOverMessage {
             display: none;
             position: absolute;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: linear-gradient(150deg, rgba(0, 0, 0, 0.265),  rgb(255, 255, 255));
+            background: linear-gradient(150deg, rgba(0, 0, 0, 0.088), rgb(255, 255, 255));
             -webkit-backdrop-filter: blur(5px);
             backdrop-filter: blur(5px);
             padding: 20px;
-            border: 2px solid #000;
             text-align: center;
-            width: 200px;
-            height: 135px;
+            width: 450px;
+            height: 250px;
             border-radius: 15px;
             font-size: 1.3rem;
+            box-shadow: 5px 7px 11px 4px rgba(0, 0, 0, 0.088);
         }
 
         #btn-restart {
@@ -54,14 +57,18 @@
             color: white;
             border-radius: 10px;
         }
-
     </style>
 </head>
+
 <body>
     <canvas id="gameCanvas" width="800" height="600"></canvas>
     <div id="gameOverMessage">
         <p>Game Over</p>
         <button id="btn-restart" onclick="restartGame()">Restart</button>
+    </div>
+    <div class="btns">
+        <button onclick="acresTime()">Aumentar</button>
+        <button onclick="dimisTime()">Diminuir</button>
     </div>
     <script>
         const canvas = document.getElementById('gameCanvas');
@@ -130,10 +137,10 @@
             else if (key == 38 && direction != "DOWN") direction = "UP";
             else if (key == 39 && direction != "LEFT") direction = "RIGHT";
             else if (key == 40 && direction != "UP") direction = "DOWN";
-            else if (key == 65 && direction != "RIGHT") direction = "LEFT"; // A
             else if (key == 87 && direction != "DOWN") direction = "UP";    // W
-            else if (key == 68 && direction != "LEFT") direction = "RIGHT"; // D
+            else if (key == 65 && direction != "RIGHT") direction = "LEFT"; // A
             else if (key == 83 && direction != "UP") direction = "DOWN";    // S
+            else if (key == 68 && direction != "LEFT") direction = "RIGHT"; // D
         }
 
         function collision(newHead, array) {
@@ -145,9 +152,17 @@
             return false;
         }
 
+        function acresTime (interval) {
+            game = setInterval(draw, interval++)
+        }
+
+        function dimisTime (interval) {
+            game = setInterval(draw, interval--)
+        }
+
         function gameOver() {
             clearInterval(game);
-            document.getElementById('gameOverMessage').style.display = 'block';
+            document.getElementById('gameOverMessage').style.display = 'flex';
         }
 
         function draw() {
@@ -174,6 +189,11 @@
             if (direction == "RIGHT") snakeX += box;
             if (direction == "DOWN") snakeY += box;
 
+            let newHead = {
+                x: snakeX,
+                y: snakeY
+            };
+
             if (snakeX == food1.x && snakeY == food1.y) {
                 score++;
                 food1 = {
@@ -182,20 +202,17 @@
                 };
             }
 
-            if (snakeX == food2.x && snakeY == food2.y) {
-                score++
+            else if (snakeX == food2.x && snakeY == food2.y) {
+                score++;
                 food2 = {
                     x: Math.floor(Math.random() * (canvas.width / box)) * box,
                     y: Math.floor(Math.random() * (canvas.height / box)) * box
-                }
-            }  else {
-                snake.pop();
+                };
             }
 
-            let newHead = {
-                x: snakeX,
-                y: snakeY
-            };
+            else {
+                snake.pop();
+            }
 
             if (snakeX < 0 || snakeY < 0 || snakeX >= canvas.width || snakeY >= canvas.height || collision(newHead, snake)) {
                 gameOver();
@@ -208,6 +225,7 @@
             ctx.font = "45px Changa one";
             ctx.fillText(score, 3 * box, 2.5 * box);
         }
+
 
         function restartGame() {
             document.getElementById('gameOverMessage').style.display = 'none';
